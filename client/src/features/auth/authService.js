@@ -6,6 +6,7 @@ const URL = BACKEND_HOST_URL;
 // Register User With Form Data
 const registerUserForm = async (user) => {
     const res = await axios.post(`${URL}/auth/register`, user);
+    console.log(res)
     if (res.data) {
         localStorage.setItem('user', JSON.stringify(res.data))
     }
@@ -15,7 +16,7 @@ const registerUserForm = async (user) => {
 // Register User With Form Data
 const loginUserForm = async (user) => {
     const res = await axios.post(`${URL}/auth/login`, user);
-    if (res.data) {
+    if (res?.data) {
         localStorage.setItem('user', JSON.stringify(res.data))
     }
     return res.data;

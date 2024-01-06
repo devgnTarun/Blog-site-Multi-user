@@ -6,6 +6,7 @@ dbConnect();
 
 const express = require("express");
 const app = express();
+const path = require('path')
 const cors = require("cors");
 
 const errHandler = require('./middleware/errHandler');
@@ -23,6 +24,11 @@ app.use('/admin', require('./routes/admin'));
 
 app.use(errHandler)
 
+app.use(express.static(path.join(__dirname, '../client/build')))
+
+app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client/build/index.html'))
+})
 // Server Runner
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

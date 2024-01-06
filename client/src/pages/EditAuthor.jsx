@@ -110,17 +110,8 @@ function EditAuthor() {
     return (
         <Fragment>
             {loadingCompleteUserData && <Loader content="Loading user data" active />}
-            <Grid centered>
-                <Grid.Row >
-                    <img src="https://cdn-icons-png.flaticon.com/512/2522/2522138.png" width={80} height={80} alt="" />
-                    <h1 style={{ marginLeft: 8, position: 'relative', bottom: '12px' }}>
-                        Edit author details
-                    </h1>
-                </Grid.Row>
-            </Grid>
-            <h2 style={{ textAlign: 'center', color: 'gray' }}>
-                Edit an author/user detail here as you're admin
-            </h2>
+
+            <p className='text-2xl text-gray-900 font-semibold text-center'>Edit User</p>
 
             {user && user.profile &&
                 <div className="profile" style={{ marginTop: 50 }}>

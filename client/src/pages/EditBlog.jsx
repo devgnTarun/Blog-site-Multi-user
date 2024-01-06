@@ -1,60 +1,39 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Button, Grid, Icon, Loader, Message, Select } from 'semantic-ui-react';
+import { useSelector, useDispatch } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Grid, Icon, Select, Loader, Button, Message } from 'semantic-ui-react';
 import { CLOUDINARY_USER_NAME } from '../config/defaults';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { writeNewBlog } from '../features/blog/blogSlice';
-import { getAllCategory } from '../features/category/categorySlice';
-import TextEditor from '../components/TextEditor';
-import { EditorState } from 'draft-js';
-import { convertToRaw } from 'draft-js';
+import { EditorState, ContentState, convertToRaw } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
 import draftToHtml from 'draftjs-to-html';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import TextEditor from '../components/TextEditor';
+import { editBlogByBlogId } from '../features/blog/blogSlice';
+import { getAllCategory } from '../features/category/categorySlice';
+
+function EditBlog() {
+
+    const location = useLocation();
 
 
-const WriteBlog = () => {
-
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const [allCategories, setAllCategories] = useState([]);
+    const dispatch = useDispatch();
 
     const auth = useSelector(state => state.auth);
-    const category = useSelector(state => state.category);
     const { profile } = useSelector(state => state.profile);
+    const category = useSelector(state => state.category);
 
-    useEffect(async () => {
+    const [title, setTitle] = useState();
 
-        if (!profile?.isActivated) {
-            navigate('/');
-            return;
-        }
 
-        if (auth.user && auth.user.token) {
-            const res = await dispatch(getAllCategory());
-            if (res.type === '/category/get/rejected') {
-                toast.error(res.payload);
-                return;
-            }
-            const data = []
-            res.payload.map(e => data.push({ text: e.name, key: e._id, value: e._id }))
-            setAllCategories(data);
-        }
-        else {
-            navigate('/');
-        }
+    const [content, setContent] = useState();
 
-    }, [auth, profile, dispatch, navigate])
-
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState(EditorState.createEmpty());
     const [image, setImage] = useState('');
-    const [selectCategory, setSelectCategory] = useState(null);
+    const [selectCategory, setSelectCategory] = useState();
+    const [allCategories, setAllCategories] = useState([]);
 
-    // console.log(draftToHtml(convertToRaw(content.getCurrentContent())))
-
-    const createBlog = async (e) => {
+    const editBlog = async (e) => {
         e.preventDefault();
 
         if (!title || !content || !image) {
@@ -78,22 +57,22 @@ const WriteBlog = () => {
             title,
             desc: draftToHtml(convertToRaw(content.getCurrentContent())),
             coverPhoto,
-            category: selectCategory
+            category: selectCategory,
+            blogId: location?.state?.blog?._id,
+            prime: profile?.role === 'admin'
         }
 
-        // return
-
-        const res = await dispatch(writeNewBlog(data));
-        if (res.type === '/blog/write/rejected') {
+        const res = await dispatch(editBlogByBlogId(data));
+        if (res.type === '/blog/edit/rejected') {
             toast.error(res.payload);
             return
         }
-        toast.success('Blog Published successfully');
+        toast.success('Blog edited successfully');
         setTitle('');
         setContent(EditorState.createEmpty());
         setImage('');
         setSelectCategory(null);
-        navigate(`/blog/${res.payload.blog._id}`);
+        navigate(`/blog/${location?.state?.blog?._id}`)
     }
 
     const [cloudinaryUploadLoading, setCloudinaryUploadLoading] = useState(false);
@@ -114,38 +93,66 @@ const WriteBlog = () => {
         }
     }
 
+    useEffect(async () => {
+        if (!auth || !auth.user || !auth.user.token) {
+            navigate('/');
+            return
+        }
+
+
+        if (!location.state || !location.state.blog) {
+            navigate('/');
+            return
+        }
+
+        const res = await dispatch(getAllCategory());
+        if (res.type === '/category/get/rejected') {
+            toast.error(res.payload);
+            return;
+        }
+        const data = []
+        res.payload.map(e => data.push({ text: e.name, key: e._id, value: e._id }))
+        setAllCategories(data);
+
+        // Setting All Values
+        setTitle(location?.state?.blog?.title);
+
+        const blocksFromHtml = htmlToDraft(location?.state?.blog?.desc);
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+        const editorState = EditorState.createWithContent(contentState);
+        setContent(editorState);
+
+        setSelectCategory(location?.state?.blog?.category?._id);
+        setImage(location?.state?.blog?.coverPhoto)
+
+
+    }, [dispatch, navigate])
+
     return (
         <Fragment>
-            <Grid centered>
-                <Grid.Row >
-                    <Icon name='edit' size='huge' />
-                    <h1 style={{ marginLeft: 8, position: 'relative', bottom: '12px' }}>
-                        Write a new blog
-                    </h1>
-                </Grid.Row>
-            </Grid>
-            <h2 style={{ textAlign: 'center', color: 'gray' }}>
-                Create a new blog and share your knowledge
-            </h2>
-            <section style={{ margin: 'auto', width: '70%', textAlign: 'center' }}>
-                <Message info size='large'>
-                    <p>Blog may look different from what it will look here. Kindly edit your blog for making it good looking.</p>
-                </Message>
-            </section>
 
             <Grid centered>
                 <div className="write">
-
+                    <p className='text-3xl text-center mx-auto text-gray-900 font-semibold mb-[25px]'>
+                        Create Blog
+                    </p>
                     {cloudinaryUploadLoading ?
-                        <Loader active content='Publishing Blog...' /> :
+                        <Loader active content='Editing Blog...' /> :
                         <Fragment>
                             {
-                                image &&
-                                <img
-                                    className="writeImg"
-                                    src={URL.createObjectURL(image)}
-                                    alt="image"
-                                />
+                                image ?
+                                    image.toString().startsWith("http") ?
+                                        <img
+                                            className="writeImg"
+                                            src={image}
+                                            alt="image"
+                                        /> :
+                                        <img
+                                            className="writeImg"
+                                            src={URL.createObjectURL(image)}
+                                            alt="image"
+                                        /> : null
                             }
                             {category?.categories &&
                                 <div style={{ marginTop: 0, fontWeight: 'bold' }}>
@@ -160,7 +167,7 @@ const WriteBlog = () => {
                                     />
                                 </div>
                             }
-                            <form className="writeForm" onSubmit={createBlog}>
+                            <form className="writeForm" onSubmit={editBlog}>
                                 <div className="writeFormGroup">
                                     <label htmlFor="fileInput">
                                         <div className="writeIcon">
@@ -180,16 +187,17 @@ const WriteBlog = () => {
                                 <div className="writeFormGroup">
                                     <TextEditor content={content} setContent={setContent} />
                                 </div>
-                                <Button color='teal' className="writeSubmit" type="submit">
-                                    Publish
+                                <Button color='green' className="writeSubmit" type="submit">
+                                    Edit
                                 </Button>
                             </form>
+                            <hr style={{ marginBottom: 50, width: '70%', display: 'block', margin: 'auto' }} />
                         </Fragment>
                     }
                 </div>
             </Grid>
-        </Fragment>
+        </Fragment >
     )
 }
 
-export default WriteBlog
+export default EditBlog

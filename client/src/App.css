@@ -1,7 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Syne:wght@400;500&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Poppins', sans-serif;
 }
 
 .form-control {
@@ -323,7 +330,6 @@ hr {
 .writeText {
     width: 70vw;
     height: 100vh;
-    font-family: inherit;
     font-size: 20px;
 }
 
@@ -348,4 +354,51 @@ hr {
 
 .ui[class*="left icon"].input>input {
     border-radius: 100px;
+}
+
+.input_tail {
+    @apply outline-none rounded-3xl px-6 py-3 border-gray-300 border-[0.3px] w-full text-sm my-[10px];
+}
+
+.btn_tail {
+    @apply w-full px-6 py-4 bg-gray-900 text-white text-sm rounded-3xl my-[10px] hover:bg-gray-700 disabled:opacity-[0.5];
+}
+
+textarea {
+    resize: none;
+}
+
+.cont_flexy {
+    display: flex;
+}
+
+@media (max-width : 500px) {
+    .cont_flexy {
+        flex-direction: column;
+    }
+}
+
+.card_flex {
+    display: flex;
+}
+
+@media (max-width : 700px) {
+    .hidden_cat {
+        display: none;
+    }
+}
+
+.card_flex {
+    display: flex;
+}
+
+@media (max-width : 780px) {
+    .card_flex {
+        flex-direction: column-reverse;
+    }
+
+    .card_flex>div {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }

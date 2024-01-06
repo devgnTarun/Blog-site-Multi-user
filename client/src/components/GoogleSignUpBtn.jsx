@@ -5,8 +5,9 @@ import { GOOGLE_CLIENT_ID } from '../config/defaults';
 import { googleSignInAuthentication } from '../features/auth/authSlice'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify';
+import GooglePng from '../assets/google.png'
 
-function GoogleSignInBtn() {
+function GoogleSignUpBtn() {
 
     const dispatch = useDispatch();
 
@@ -28,7 +29,9 @@ function GoogleSignInBtn() {
                 <GoogleLogin
                     clientId={GOOGLE_CLIENT_ID}
                     render={renderProps => (
-                        <Button onClick={renderProps.onClick} disabled={renderProps.disabled} color='teal' fluid>Sign In with Google</Button>
+                        <div onClick={renderProps.onClick} disabled={renderProps.disabled} className="w-full items-center justify-center hover:bg-gray-100 cursor-pointer px-6 py-3 flex mt-[10px] border-gray-300 border-[0.5px] rounded-3xl">
+                            <img src={GooglePng} alt="google" className='w-[20px]' /> <p className='text-sm font-medium text-gray-700 mx-3'>Sign in with google</p>
+                        </div>
                     )}
                     onSuccess={onSuccessResponseGoogle}
                     onFailure={onFailureResponseGoogle}
@@ -39,4 +42,4 @@ function GoogleSignInBtn() {
     )
 }
 
-export default GoogleSignInBtn
+export default GoogleSignUpBtn

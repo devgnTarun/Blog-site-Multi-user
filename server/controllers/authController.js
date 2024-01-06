@@ -94,7 +94,7 @@ const login = asyncHandler(async (req, res) => {
 
     // Check if user is not blocked
     const profile = await Profile.findOne({ user: userExists._id });
-    if (profile.isBlocked) {
+    if (profile?.isBlocked) {
         res.status(400)
         throw new Error('You have been blocked.')
     }
@@ -181,7 +181,7 @@ const googleSignIn = asyncHandler(async (req, res) => {
             })
 
             // Send Account Confirmation/Activation Email 
-            activationEmail({ to: newUser.email.trim(), token });
+            await activationEmail({ to: newUser.email.trim(), token });
 
         }
     }
@@ -358,7 +358,7 @@ const changePassword = asyncHandler(async (req, res) => {
 // Generate Token
 const generateToken = (id) => {
     const payload = { id };
-    return jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '1d' })
+    return jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '15d' })
 }
 
 module.exports = {

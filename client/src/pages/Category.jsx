@@ -29,10 +29,7 @@ function Category() {
             navigate('/');
             return
         }
-
-        if (!categories) {
-            dispatch(getAllCategory());
-        }
+        dispatch(getAllCategory());
 
     }, [navigate, dispatch])
 
@@ -119,64 +116,68 @@ function Category() {
                                 <Form.Input placeholder='Category' width={13}>
                                     <input type="text" value={addCategoryValue} onChange={(e) => setAddCategoryValue(e.target.value)} />
                                 </Form.Input>
-                                <Form.Button fluid type='button' loading={addCategoryBtnLoading} content='Add Category' secondary width={3} onClick={handleAddCategory} />
+                                <Form.Button fluid type='button' loading={addCategoryBtnLoading} content='Add' secondary width={3} onClick={handleAddCategory} />
                             </Form.Group>
                         </Form>
                     </div>
-                    <Table singleLine celled striped padded>
-                        <Table.Header>
-                            <Table.Row textAlign='center'>
-                                <Table.HeaderCell collapsing>Author</Table.HeaderCell>
-                                <Table.HeaderCell>Category</Table.HeaderCell>
-                                <Table.HeaderCell>Last Updated at</Table.HeaderCell>
-                                <Table.HeaderCell>Edit/Delete</Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {categories?.map(cat =>
-                                <Fragment key={cat._id}>
-                                    <Table.Row textAlign='center'>
-                                        <Table.Cell>
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flexStart', cursor: 'pointer' }} onClick={() => navigate(`/profile/${cat.profile._id}`)} >
-                                                <img src={cat.profile.profileUrl} style={{ borderRadius: '50%' }} width={50} height={50} alt="profile" />
-                                                <p style={{ marginLeft: 9, fontSize: 16, color: '#4183c4' }} >{cat.user.name}</p>
-                                            </div>
-                                        </Table.Cell>
-                                        <Table.Cell>{cat.name}</Table.Cell>
-                                        <Table.Cell>{formatDate(cat.updatedAt)}</Table.Cell>
-                                        {checkIfPrimeUser(user) ? // If it is prime user, then allow all actions 
-                                            <Fragment>
-                                                <Table.Cell>
-                                                    {/* Edit Category */}
-                                                    <span style={{ cursor: 'pointer', marginRight: 5 }} onClick={() => handleEditIconClick(cat)}>
-                                                        <Icon name='edit outline' size='large' color='blue' />
-                                                    </span>
-                                                    {/* Delete Category */}
-                                                    <span style={{ cursor: 'pointer' }}>
-                                                        <Icon name='delete' size='large' color='red' onClick={() => handleCategoryDelete(cat._id)} />
-                                                    </span>
-                                                </Table.Cell>
-                                            </Fragment>
-                                            :
-                                            cat.user._id === user._id ? // else admins can edit/delete thier category only
-                                                <Table.Cell>
-                                                    {/* Edit Category */}
-                                                    <span style={{ cursor: 'pointer', marginRight: 5 }} onClick={() => handleEditIconClick(cat)}>
-                                                        <Icon name='edit outline' size='large' color='blue' />
-                                                    </span>
-                                                    {/* Delete Category */}
-                                                    <span style={{ cursor: 'pointer' }}>
-                                                        <Icon name='delete' size='large' color='red' onClick={() => handleCategoryDelete(cat._id)} />
-                                                    </span>
-                                                </Table.Cell>
-                                                :
-                                                <Table.Cell>-------------</Table.Cell>
-                                        }
-                                    </Table.Row>
-                                </Fragment>
-                            )}
-                        </Table.Body>
-                    </Table>
+                    <div className="overflow-x-auto my-5">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Updated at</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit/Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {categories &&
+                                    categories.map((cat) => (
+                                        <Fragment key={cat._id}>
+                                            <tr>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    <div
+                                                        className="flex items-center justify-start cursor-pointer"
+                                                        onClick={() => navigate(`/profile/${cat.profile._id}`)}
+                                                    >
+                                                        <img
+                                                            src={cat?.profile?.profileUrl}
+                                                            className="rounded-full"
+                                                            width={50}
+                                                            height={50}
+                                                            alt="profile"
+                                                        />
+                                                        <p className="ml-3 text-sm font-medium text-blue-500">{cat.user?.name}</p>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap">{cat.name}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap">{formatDate(cat.updatedAt)}</td>
+                                                <td className="px-6 py-4 whitespace-nowrap">
+                                                    {checkIfPrimeUser(user) || cat.user?._id === user?._id ? (
+                                                        <Fragment>
+                                                            <span
+                                                                className="cursor-pointer mr-2 bg-yellow-400 px-3 py-2 rounded-xl text-white"
+                                                                onClick={() => handleEditIconClick(cat)}
+                                                            >
+                                                                Edit
+                                                            </span>
+                                                            <span
+                                                                className="cursor-pointer  bg-red-500 px-3 py-2 rounded-xl text-white"
+                                                                onClick={() => handleCategoryDelete(cat._id)}
+                                                            >
+                                                                Delete
+                                                            </span>
+                                                        </Fragment>
+                                                    ) : (
+                                                        <span>-------------</span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        </Fragment>
+                                    ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </Fragment>
             }
         </Fragment>

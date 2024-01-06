@@ -11,7 +11,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 /**************** PAGES ****************/
-import Navbar from './components/Navbar';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -21,7 +20,6 @@ import ResetPassword from './pages/ResetPassword';
 import ActivateAccount from './pages/ActivateAccount';
 import UpdateProfile from './pages/UpdateProfile';
 import ChangePassword from './pages/ChangePassword';
-import SingleProfile from './pages/SingleProfile';
 import Account from './pages/Account';
 import WriteBlog from './pages/WriteBlog';
 import SingleBlog from './pages/SingleBlog';
@@ -30,6 +28,9 @@ import Category from './pages/Category';
 import Authors from './pages/Authors';
 import EditAuthor from './pages/EditAuthor';
 import Blogs from './pages/Blogs';
+import Header from './components/Header';
+import UserProfile from './pages/UserProfile'
+import CategoryBlog from './pages/CategoryBlog';
 
 function App() {
 
@@ -73,7 +74,7 @@ function App() {
       <ToastContainer autoClose={2500} />
       <BrowserRouter>
         <Container>
-          <Navbar />
+          <Header />
           <Routes>
             <Route path='/' element={<Landing />} />
             <Route path='/login' element={<Login />} />
@@ -83,12 +84,13 @@ function App() {
             <Route path='/auth/activate/:token' element={<ActivateAccount />} />
             <Route path='/update-profile' element={<UpdateProfile />} />
             <Route path='/change-password' element={<ChangePassword />} />
-            <Route path='/profile/:profileId' element={<SingleProfile />} />
+            <Route path='/profile/:profileId' element={<UserProfile />} />
             <Route path='/account' element={<Account />} />
-            <Route path='/write' element={<WriteBlog />} />
+            <Route path='/createBlog' element={<WriteBlog />} />
             <Route path='/blogs' element={<Blogs />} />
             <Route path='/edit' element={<EditBlog />} />
             <Route path='/blog/:blogId' element={<SingleBlog />} />
+            <Route path='/blogs/category/:id' element={<CategoryBlog />} />
             <Route path='/category' element={<Category />} />
             <Route path='/authors' element={<Authors />} />
             <Route path='/edit/author' element={<EditAuthor />} />

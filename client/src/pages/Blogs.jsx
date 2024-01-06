@@ -55,17 +55,7 @@ function Blogs() {
 
     return (
         <Fragment>
-            <Grid centered>
-                <Grid.Row>
-                    <Icon name='blogger b' size='huge' />
-                    <h1 style={{ marginLeft: 8, position: 'relative', bottom: '12px' }}>
-                        Your Blogs
-                    </h1>
-                </Grid.Row>
-            </Grid>
-            <h2 style={{ textAlign: 'center', color: 'gray' }}>
-                Here is the list of all of your blogs
-            </h2>
+            <p className='text-3xl text-gray-900 font-medium text-center my-5'>Blogs</p>
             {/* Blogs Menu */}
             <Menu pointing secondary>
                 <Menu.Item
@@ -73,11 +63,7 @@ function Blogs() {
                     active={activeItem === 'published'}
                     onClick={() => handleMenuItemClick('published')}
                 />
-                <Menu.Item
-                    name={`Reacted ${blogs && activeItem === 'reacted' ? `(${blogs.length})` : ``}`}
-                    active={activeItem === 'reacted'}
-                    onClick={() => handleMenuItemClick('reacted')}
-                />
+
             </Menu>
             {loadingBlogs && <Loader active content='Loading your blogs' />}
             {!loadingBlogs && <div className="user-blogs">

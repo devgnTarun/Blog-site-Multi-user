@@ -178,7 +178,7 @@ module.exports = {
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td>
-                                                    <h1>Confirm your email</h1>
+                                                    <h1>Verify your email</h1>
                                                     <h3>You are just one step away. This link is one time accessible and valid for 24 hours only.</h3>
                                                     <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                                         <tbody>
@@ -188,7 +188,7 @@ module.exports = {
                                                                         <tbody>
                                                                             <tr>
                                                                                 <td> <a href="${url}auth/activate/${token}"
-                                                                                        target="_blank">confirm email</a> </td>
+                                                                                        target="_blank">Verify your email</a> </td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
@@ -197,7 +197,6 @@ module.exports = {
                                                         </tbody>
                                                     </table>
                                                     <p>If above button does not work, copy this url in your browser ${url}auth/activate/${token}</p>
-                                                    <h2>See you there 😊😊</h2>
                                                 </td>
                                             </tr>
                                         </table>
@@ -827,7 +826,7 @@ module.exports = {
                                                 <table border="0" cellpadding="0" cellspacing="0">
                                                     <tr>
                                                         <td>
-                                                            <h1>${isBlockNow?'You have been blocked':'You have been unblocked'}</h1>
+                                                            <h1>${isBlockNow ? 'You have been blocked' : 'You have been unblocked'}</h1>
                                                             <h3> ${isBlockNow ? 'Looks like you have tried to write something offensive at our site. Hence, you have blocked from our services.' : 'Congratulations !! You have been unblocked now.'} </h3>
                                                             <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                                                 <tbody>
@@ -836,10 +835,10 @@ module.exports = {
                                                                             <table border="0" cellpadding="0" cellspacing="0">
                                                                                 <tbody>
                                                                                     <tr>
-                                                                                    ${!isBlockNow?
-                                                                                      `<td> <a href=${url}
-                                                                                        target="_blank">Visit Website</a> </td>`:``
-                                                                                    }
+                                                                                    ${!isBlockNow ?
+                `<td> <a href=${url}
+                                                                                        target="_blank">Visit Website</a> </td>`: ``
+            }
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -847,10 +846,10 @@ module.exports = {
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
-                                                            ${!isBlockNow?
-                                                                `<h2>See you there 😊😊</h2>`:
-                                                                ``
-                                                            }
+                                                            ${!isBlockNow ?
+                `<h2>See you there 😊😊</h2>` :
+                ``
+            }
                                                         </td>
                                                     </tr>
                                                 </table>

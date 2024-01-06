@@ -1,30 +1,31 @@
 const path = require("path");
-
+const nodeMailer = require('nodemailer');
 // Environmental Variables
 require("dotenv").config({ path: path.resolve(__dirname, '../.env') });
 
 const URL = process.env.CLIENT_HOST_URL
-const API_KEY = process.env.SENDGRID_KEY
-const SENDER_EMAIL = process.env.SENDER_EMAIL
-
-const sgMail = require("@sendgrid/mail");
 const { activationTemplate, forgotPasswordTemplate, userRoleChangedEmailTemplate, userBlockEmailTemplate } = require("./mailTemplates");
 
-sgMail.setApiKey(API_KEY);
+const trasporter = nodeMailer.createTransport({
+    pool: true,
+    port: 2525,
+    service: 'hotmail',
+    auth: {
+        user: process.env.SMPT_MAIL,
+        pass: process.env.SMPT_PASSWORD,
+    },
+});
 
 // Sends Email For Activate Account
 const activationEmail = async ({ to, token }) => {
     const message = {
         to: [to],
-        from: {
-            name: 'uBlogit',
-            email: SENDER_EMAIL
-        },
-        subject: 'Activate your account',
+        from: process.env.SMPT_MAIL,
+        subject: 'Activate your email account',
         html: activationTemplate(URL, token)
     }
     try {
-        await sgMail.send(message);
+        await trasporter.sendMail(message);
         console.log('Activation Link Email Sent...')
     } catch (err) {
         console.log(err)
@@ -35,15 +36,12 @@ const activationEmail = async ({ to, token }) => {
 const forgotPasswordEmail = async ({ to, token }) => {
     const message = {
         to: [to],
-        from: {
-            name: 'uBlogit',
-            email: SENDER_EMAIL
-        },
-        subject: 'Reset your Password',
+        from: process.env.SMPT_MAIL,
+        subject: 'Activate your email account',
         html: forgotPasswordTemplate(URL, token)
     }
     try {
-        await sgMail.send(message);
+        await trasporter.sendMail(message);
         console.log('Reset Password Email Sent...')
     } catch (err) {
         console.log(err)
@@ -54,15 +52,12 @@ const forgotPasswordEmail = async ({ to, token }) => {
 const userRoleChangedEmail = async ({ to, isAdminNow }) => {
     const message = {
         to: [to],
-        from: {
-            name: 'uBlogit',
-            email: SENDER_EMAIL
-        },
-        subject: 'Your role have been changed',
+        from: process.env.SMPT_MAIL,
+        subject: 'Activate your email account',
         html: userRoleChangedEmailTemplate(URL, isAdminNow)
     }
     try {
-        await sgMail.send(message);
+        await trasporter.sendMail(message);
         console.log('User role changed Email Sent...')
     } catch (err) {
         console.log(err)
@@ -73,15 +68,12 @@ const userRoleChangedEmail = async ({ to, isAdminNow }) => {
 const userBlockEmail = async ({ to, isBlockNow }) => {
     const message = {
         to: [to],
-        from: {
-            name: 'uBlogit',
-            email: SENDER_EMAIL
-        },
-        subject: 'Your status have been changed',
+        from: process.env.SMPT_MAIL,
+        subject: 'Activate your email account',
         html: userBlockEmailTemplate(URL, isBlockNow)
     }
     try {
-        await sgMail.send(message);
+        await trasporter.sendMail(message);
         console.log('User status changed Email Sent...')
     } catch (err) {
         console.log(err)
