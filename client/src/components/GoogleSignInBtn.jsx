@@ -1,42 +1,32 @@
 import React, { Fragment } from 'react';
-import { GoogleLogin } from 'react-google-login';
-import { Button } from 'semantic-ui-react';
-import { GOOGLE_CLIENT_ID } from '../config/defaults';
 import { googleSignInAuthentication } from '../features/auth/authSlice'
 import { useDispatch } from 'react-redux'
-import { toast } from 'react-toastify';
-import GooglePng from '../assets/google.png'
+import { GoogleLogin } from '@react-oauth/google';
 
 function GoogleSignInBtn() {
 
     const dispatch = useDispatch();
+    // dispatch(googleSignInAuthentication(idToken));
 
-    const onSuccessResponseGoogle = (response) => {
-        const idToken = response.tokenId;
-        dispatch(googleSignInAuthentication(idToken));
-    }
+    const responseMessage = (response) => {
+        console.log(response);
+        const { credential } = response;
 
-    const onFailureResponseGoogle = (response) => {
-        console.log(response)
-        toast.error('Google Sign In unsuccessful.')
-    }
+        // Dispatch the token to your Redux store
+        dispatch(googleSignInAuthentication({ idToken: credential }));
+    };
+    const errorMessage = (error) => {
+        console.log(error);
+    };
 
     return (
         <Fragment>
             <section style={{
                 marginTop: 12
             }} >
-                <GoogleLogin
-                    clientId={GOOGLE_CLIENT_ID}
-                    render={renderProps => (
-                        <div onClick={renderProps.onClick} disabled={renderProps.disabled} className="w-full items-center justify-center hover:bg-gray-100 cursor-pointer px-6 py-3 flex mt-[10px] border-gray-300 border-[0.5px] rounded-3xl">
-                            <img src={GooglePng} alt="google" className='w-[20px]' /> <p className='text-sm font-medium text-gray-700 mx-3'>Sign in with google</p>
-                        </div>
-                    )}
-                    onSuccess={onSuccessResponseGoogle}
-                    onFailure={onFailureResponseGoogle}
-                    cookiePolicy={'single_host_origin'}
-                />
+                <div className="w-full flex items-center justify-center">
+                    <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+                </div>
             </section>
         </Fragment>
     )

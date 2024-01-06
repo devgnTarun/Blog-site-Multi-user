@@ -30,7 +30,7 @@ const register = asyncHandler(async (req, res) => {
     }
 
     // Check if user exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: { $regex: new RegExp('^' + email, 'i') } });
     if (userExists) {
         res.status(400)
         throw new Error(JSON.stringify({ err: 'User Already exists' }))
@@ -79,7 +79,7 @@ const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     // Check if user exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: { $regex: new RegExp('^' + email, 'i') } });
     if (!userExists) {
         res.status(400)
         throw new Error(JSON.stringify({ err: 'No such user exists' }))
@@ -113,21 +113,21 @@ const login = asyncHandler(async (req, res) => {
 // @Route   /auth/googlesignin
 // @Access  Public
 const googleSignIn = asyncHandler(async (req, res) => {
-    const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
+    const googleClient = new OAuth2Client('243900479621-laec3pomtfck4hh336bs5m5f0ftt8tbd.apps.googleusercontent.com');
 
-    // Google Token
-    const { idToken } = req.body;
-
+    // // Google Token
+    const { idToken } = await req.body;
     const response = await googleClient.verifyIdToken({
-        idToken,
-        audience: GOOGLE_CLIENT_ID
+        idToken: idToken.idToken,
+        audience: '243900479621-laec3pomtfck4hh336bs5m5f0ftt8tbd.apps.googleusercontent.com'
     });
-
+    console.log(response)
+    // const response = await verifyToken(idToken)
     const { name, email, picture, email_verified } = response.getPayload();
-
+    console.log(response.getUserId())
     if (email_verified) {
         // Find Email in User Model
-        const userExists = await User.findOne({ email });
+        const userExists = await User.findOne({ email: { $regex: new RegExp('^' + email, 'i') } });
 
         if (userExists) {
 
@@ -241,7 +241,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const { email } = req.body;
 
     // Check if user with that email exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email: { $regex: new RegExp('^' + email, 'i') } });
 
     if (!userExists) {
         res.status(400)

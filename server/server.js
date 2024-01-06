@@ -24,10 +24,10 @@ app.use('/admin', require('./routes/admin'));
 
 app.use(errHandler)
 
-app.use(express.static(path.join(__dirname, '../client/build')))
+app.use(express.static(path.join(__dirname, './client/build')))
 
 app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/build/index.html'))
+    res.sendFile(path.resolve(__dirname, './client/build/index.html'))
 })
 // Server Runner
 const PORT = process.env.PORT || 5000;
