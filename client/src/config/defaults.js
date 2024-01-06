@@ -1,4 +1,4 @@
 export const BACKEND_HOST_URL = "http://localhost:5000"
-export const GOOGLE_CLIENT_ID = "422813784314-0ufataavfm44p5usepp07rr6ng84n97l.apps.googleusercontent.com"
-export const GOOGLE_CLIENT_SECRET = "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"
-export const CLOUDINARY_USER_NAME = "dquxwox28"
+export const GOOGLE_CLIENT_ID = "243900479621-laec3pomtfck4hh336bs5m5f0ftt8tbd.apps.googleusercontent.com"
+export const GOOGLE_CLIENT_SECRET = "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"
+export const CLOUDINARY_USER_NAME = "dquxwox28" 
