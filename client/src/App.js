@@ -31,6 +31,7 @@ import Blogs from './pages/Blogs';
 import Header from './components/Header';
 import UserProfile from './pages/UserProfile'
 import CategoryBlog from './pages/CategoryBlog';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -97,6 +98,7 @@ function App() {
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Container>
+        <Footer />
       </BrowserRouter>
     </Fragment>
   );

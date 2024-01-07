@@ -105,9 +105,9 @@ function Category() {
             />
 
             {isLoading ?
-                <Fragment>
+                <div className='w-full min-h-[60vh]'>
                     <Loader active content='Loading categories...' />
-                </Fragment>
+                </div>
                 :
                 <Fragment>
                     <div style={{ width: '70%', margin: 'auto' }} >

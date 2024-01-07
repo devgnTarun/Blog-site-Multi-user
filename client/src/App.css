@@ -20,6 +20,10 @@
     margin-left: 8px !important;
 }
 
+.nav_scroll::-webkit-scrollbar {
+    display: none;
+}
+
 .activation-message {
     font-size: 15px !important;
 }

@@ -253,7 +253,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const token = jwt.sign(payload, JWT_RESET_KEY, { expiresIn: '10m' })
 
     // Send Reset Password Email
-    forgotPasswordEmail({ to: userExists.email, token })
+    await forgotPasswordEmail({ to: userExists.email, token })
 
     res.status(200).json({ msg: 'Reset Password Link sent' });
 })
@@ -311,7 +311,7 @@ const sendActivationLink = asyncHandler(async (req, res) => {
     }
 
     const token = generateToken(req.user._id);
-    activationEmail({ to: userExists.email, token })
+    await activationEmail({ to: userExists.email, token })
 
     res.status(200).json({ msg: 'Activation Link Sent to your email' });
 

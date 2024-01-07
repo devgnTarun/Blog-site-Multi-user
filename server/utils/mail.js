@@ -7,15 +7,15 @@ const URL = process.env.CLIENT_HOST_URL
 const { activationTemplate, forgotPasswordTemplate, userRoleChangedEmailTemplate, userBlockEmailTemplate } = require("./mailTemplates");
 
 const trasporter = nodeMailer.createTransport({
-    pool: true,
-    port: 2525,
-    service: 'hotmail',
+    host: "smtp.gmail.com",
+    port: 465,
+    service: process.env.SMPT_SERVICE,
     auth: {
         user: process.env.SMPT_MAIL,
         pass: process.env.SMPT_PASSWORD,
     },
 });
-
+// tarundevgan29.9.2003@gmail.com
 // Sends Email For Activate Account
 const activationEmail = async ({ to, token }) => {
     const message = {

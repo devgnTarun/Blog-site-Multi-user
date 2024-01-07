@@ -8,6 +8,7 @@ import { Grid, Message, Icon, Label, Loader, Menu, Header, Input } from 'semanti
 import { blogReset, getBlogsByCategoryId, getLatestBlogs } from '../features/blog/blogSlice';
 import { extractDescriptionFromHTML, formatDate, searchBlogs } from '../app/helpers';
 import { getAllCategory } from '../features/category/categorySlice';
+import StockSlider from '../components/Market';
 
 const renderBlogsData = (blogs, activeCategory) => {
     return (
@@ -66,7 +67,9 @@ const renderBlogsData = (blogs, activeCategory) => {
                             </div>
                         </>
                     ))
-                : <Loader active content={activeCategory !== 'all blogs' ? 'Loading blogs of selected category' : 'Loading Latest Blogs'} />
+                : <div className="w-full min-h-[50vh] flex items-center justify-center">
+                    <Loader active content={activeCategory !== 'all blogs' ? 'Loading blogs of selected category' : 'Loading Latest Blogs'} />
+                </div>
             }
         </Grid>
     )

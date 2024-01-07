@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Grid, Icon, Loader, Menu } from 'semantic-ui-react';
 import BlogItem from '../components/BlogItem';
 import { getBlogsOfUser } from '../features/blog/blogSlice';
+import { isFulfilled } from '@reduxjs/toolkit';
 
 const checkReactedBlogs = (blogs) => {
     return blogs.filter(blog => {
@@ -65,7 +66,10 @@ function Blogs() {
                 />
 
             </Menu>
-            {loadingBlogs && <Loader active content='Loading your blogs' />}
+            {loadingBlogs &&
+                <div className='w-full min-h-[60vh] flex items-center justify-center'>
+                    <Loader active content='Loading your blogs' />
+                </div>}
             {!loadingBlogs && <div className="user-blogs">
                 <Fragment>
                     <Grid>

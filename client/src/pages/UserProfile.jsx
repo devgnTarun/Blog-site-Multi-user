@@ -138,7 +138,10 @@ function SingleProfile() {
                     {errorMessage.map(err => { <Message error floating content={err} /> })}
                 </Fragment> : null
             }
-            {!otherProfile ? <Loader active>Loading profile</Loader>
+            {!otherProfile ?
+                <div className="w-full min-h-[50vh]">
+                    <Loader active>Loading profile</Loader>
+                </div>
                 :
                 otherProfile.profile && otherProfile.user ?
                     <>
